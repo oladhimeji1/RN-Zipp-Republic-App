@@ -38,4 +38,10 @@ export const shadow = Platform.select({
 }) as object;
 
 export const PAD = 20;
-export const TAB_SPACE = 120;
+export const TAB_SPACE = 110;
+
+export const spring = {
+  snappy: { damping: 28, stiffness: 420, mass: 0.7 },
+  smooth: { damping: 26, stiffness: 320, mass: 0.8 },
+  sheet: { damping: 32, stiffness: 360, mass: 0.85 },
+};

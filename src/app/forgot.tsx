@@ -37,8 +37,8 @@ export default function Forgot() {
       <ScreenHeader />
       <View style={styles.body}>
         {sent ? (
-          <Animated.View entering={FadeIn} style={{ alignItems: 'center', paddingTop: 40 }}>
-            <Animated.View entering={ZoomIn.springify().damping(9)}>
+          <Animated.View entering={FadeIn.duration(200)} style={{ alignItems: 'center', paddingTop: 40 }}>
+            <Animated.View entering={ZoomIn.duration(220)}>
               <SuccessBadge size={92} />
             </Animated.View>
             <Text style={styles.title}>Check your inbox</Text>
@@ -46,7 +46,7 @@ export default function Forgot() {
             <Button title="Back to sign in" onPress={() => router.replace('/signin')} style={{ alignSelf: 'stretch', marginTop: 28 }} />
           </Animated.View>
         ) : (
-          <Animated.View entering={FadeInDown.springify()}>
+          <Animated.View entering={FadeInDown.duration(200)}>
             <Text style={styles.title}>Forgot password?</Text>
             <Text style={styles.sub}>Enter the email linked to your account and we will send you a reset link.</Text>
             <Input label="Email address" placeholder="you@example.com" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" error={tried && !EMAIL.test(email.trim()) ? 'Enter a valid email address' : null} />

@@ -28,7 +28,7 @@ export default function OrderDetail() {
   const stage = order ? orderStage(order, now) : 0;
   const p = useSharedValue(0);
   useEffect(() => {
-    p.value = withSpring(stage / 3, { damping: 16 });
+    p.value = withSpring(stage / 3, { damping: 28, stiffness: 320 });
   }, [stage, p]);
   const lineFill = useAnimatedStyle(() => ({ height: `${p.value * 100}%` }));
 
@@ -50,7 +50,7 @@ export default function OrderDetail() {
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <ScreenHeader title={order.id} />
       <ScrollView contentContainerStyle={{ padding: PAD, paddingBottom: 60 }} showsVerticalScrollIndicator={false}>
-        <Animated.View entering={FadeInDown.springify().damping(18)} style={styles.statusBox}>
+        <Animated.View entering={FadeInDown.duration(220)} style={styles.statusBox}>
           <Text style={styles.cap}>PLACED {prettyDate(order.createdAt).toUpperCase()}</Text>
           <Text style={styles.statusTitle}>{ORDER_STAGES[stage]}</Text>
           <Text style={styles.statusSub}>{SUB[stage]}</Text>

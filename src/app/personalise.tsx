@@ -103,7 +103,7 @@ export default function Personalise() {
         <Text style={styles.count}>{step + 1} / 3</Text>
       </View>
 
-      <Animated.View key={step} entering={FadeInDown.springify().damping(17)} exiting={FadeOut.duration(120)} style={{ flex: 1 }}>
+      <Animated.View key={step} entering={FadeInDown.duration(200)} exiting={FadeOut.duration(120)} style={{ flex: 1 }}>
         {step === 0 && (
           <>
             <Text style={styles.q}>Who are you shopping for?</Text>

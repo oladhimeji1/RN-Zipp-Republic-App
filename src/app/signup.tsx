@@ -37,8 +37,8 @@ export default function SignUp() {
     signIn(n, e);
     setDone(true);
     success();
-    pop.value = withDelay(150, withSpring(1, { damping: 9, stiffness: 120 }));
-    setTimeout(() => router.replace('/greeting'), 1900);
+    pop.value = withDelay(80, withSpring(1, { damping: 18, stiffness: 280 }));
+    setTimeout(() => router.replace('/greeting'), 1200);
   };
 
   const submit = () => {
@@ -60,17 +60,17 @@ export default function SignUp() {
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#fff' }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScreenHeader />
       <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        <Animated.Text entering={FadeInDown.delay(60).springify()} style={styles.title}>
+        <Animated.Text entering={FadeInDown.delay(30).duration(220)} style={styles.title}>
           Create your account
         </Animated.Text>
-        <Animated.Text entering={FadeInDown.delay(120).springify()} style={styles.sub}>
+        <Animated.Text entering={FadeInDown.delay(70).duration(220)} style={styles.sub}>
           Join the Republic for early access to drops, restocks and members-only offers.
         </Animated.Text>
-        <Animated.View entering={FadeInDown.delay(180).springify()}>
+        <Animated.View entering={FadeInDown.delay(100).duration(220)}>
           <SocialRow onPress={() => finish('Zipp Member', 'member@zipprepublic.test')} />
           <OrDivider />
         </Animated.View>
-        <Animated.View entering={FadeInDown.delay(240).springify()}>
+        <Animated.View entering={FadeInDown.delay(140).duration(220)}>
           <Input label="Full name" placeholder="Your name" value={name} onChangeText={setName} autoCapitalize="words" error={tried ? errs.name : null} />
           <Input label="Email address" placeholder="you@example.com" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" error={tried ? errs.email : null} />
           <Input label="Password" placeholder="At least 8 characters" value={pw} onChangeText={setPw} password error={tried ? errs.pw : null} />

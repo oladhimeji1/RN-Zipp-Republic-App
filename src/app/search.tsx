@@ -88,7 +88,7 @@ export default function Search() {
               </View>
             </View>
           ) : null}
-          <Animated.View entering={FadeInDown.delay(100).springify()}>
+          <Animated.View entering={FadeInDown.delay(40).duration(200)}>
             <Text style={[styles.cap, { marginBottom: 12 }]}>POPULAR SEARCHES</Text>
             <View style={styles.chips}>
               {POPULAR.map((r) => (

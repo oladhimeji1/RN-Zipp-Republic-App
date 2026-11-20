@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SectionHeader } from '@/components/Common';
 import { Img } from '@/components/Img';
@@ -11,79 +11,275 @@ import { PressableScale } from '@/components/PressableScale';
 import { ProductCard } from '@/components/ProductCard';
 import { COLLECTIONS, PRODUCTS, productsIn } from '@/lib/data';
 import { PAD, TAB_SPACE, W, colors, fonts } from '@/lib/theme';
+import { select } from '@/lib/haptics';
 
-const ROWS = ['new', 'men', 'women', 'tshirts', 'jackets-hoodies', 'accessories', 'slides', 'sale'];
 const CARD = (W - PAD * 2 - 12) / 2;
+const SEGMENTS: { id: 'all' | 'men' | 'women'; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'men', label: 'Men' },
+  { id: 'women', label: 'Women' },
+];
+
+const CATEGORIES: { slug: string; tag: string; icon: keyof typeof Ionicons.glyphMap; tone: string }[] = [
+  { slug: 'new', tag: 'LATEST DROP', icon: 'flame', tone: '#121212' },
+  { slug: 'tshirts', tag: 'JERSEYS & TEES', icon: 'shirt-outline', tone: '#1D2939' },
+  { slug: 'slides', tag: 'FOOTWEAR', icon: 'footsteps-outline', tone: '#2C241D' },
+  { slug: 'jackets-hoodies', tag: 'OUTERWEAR', icon: 'snow-outline', tone: '#1F2421' },
+  { slug: 'jewelry', tag: 'WATCHES & CHAINS', icon: 'watch-outline', tone: '#3A2E1E' },
+  { slug: 'hats', tag: 'HEADWEAR', icon: 'sunny-outline', tone: '#252525' },
+];
 
 export default function Shop() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const trending = [...PRODUCTS].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
+  const [segment, setSegment] = useState<'all' | 'men' | 'women'>('all');
+
+  const filteredProducts = useMemo(() => {
+    if (segment === 'all') return PRODUCTS;
+    return PRODUCTS.filter((p) => p.gender === segment || p.gender === 'unisex');
+  }, [segment]);
+
+  const trending = useMemo(
+    () => [...filteredProducts].sort((a, b) => b.reviews - a.reviews).slice(0, 6),
+    [filteredProducts]
+  );
 
   return (
-    <ScrollView contentContainerStyle={{ paddingTop: insets.top + 12, paddingBottom: TAB_SPACE + 20 }} showsVerticalScrollIndicator={false}>
-      <Animated.Text entering={FadeInDown.springify()} style={styles.title}>
-        Shop
-      </Animated.Text>
-      <Animated.View entering={FadeInDown.delay(80).springify()}>
-        <PressableScale onPress={() => router.push('/search')} style={styles.search}>
-          <Ionicons name="search" size={18} color={colors.mute} />
-          <Text style={styles.searchText}>Search jerseys, slides, varsity...</Text>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      {/* NATIVE HEADER WITH SEGMENTED CONTROL */}
+      <View style={[styles.topHeader, { paddingTop: insets.top + 8 }]}>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>Explore</Text>
+          <PressableScale onPress={() => router.push('/collection/all')} style={styles.allBtn}>
+            <Text style={styles.allBtnText}>Full Catalog</Text>
+            <Ionicons name="arrow-forward" size={13} color={colors.ink} />
+          </PressableScale>
+        </View>
+
+        <PressableScale scaleTo={0.985} onPress={() => router.push('/search')} style={styles.search}>
+          <Ionicons name="search" size={17} color={colors.mute} />
+          <Text style={styles.searchText}>Search products, colors, categories...</Text>
         </PressableScale>
-      </Animated.View>
 
-      <View style={{ gap: 4, marginTop: 6 }}>
-        {ROWS.map((slug, i) => {
-          const c = COLLECTIONS.find((x) => x.slug === slug)!;
-          const tone = slug === 'accessories' ? '#D9C7A8' : slug === 'sale' ? '#C8201A' : '#E9E6DF';
-          return (
-            <Animated.View key={slug} entering={FadeInRight.delay(120 + i * 60).springify().damping(18)}>
-              <PressableScale scaleTo={0.985} onPress={() => router.push(`/collection/${slug}`)} style={styles.row}>
-                <Img uri={c.image} tone={tone} style={StyleSheet.absoluteFill as object} contentPosition="top" />
-                <LinearGradient colors={['rgba(0,0,0,0.75)', 'rgba(0,0,0,0.05)']} start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }} style={StyleSheet.absoluteFill} />
-                <Text style={styles.rowTitle}>{c.title}</Text>
-                <Ionicons name="arrow-forward" size={20} color="#fff" style={{ marginRight: PAD }} />
+        <View style={styles.segTrack}>
+          {SEGMENTS.map((s) => {
+            const on = segment === s.id;
+            return (
+              <PressableScale
+                key={s.id}
+                scaleTo={0.97}
+                onPress={() => {
+                  select();
+                  setSegment(s.id);
+                }}
+                style={[styles.segBtn, on && styles.segBtnOn]}
+              >
+                <Text style={[styles.segText, on && styles.segTextOn]}>{s.label}</Text>
               </PressableScale>
-            </Animated.View>
-          );
-        })}
+            );
+          })}
+        </View>
       </View>
 
-      <View style={{ height: 34 }} />
-      <SectionHeader title="Trending this week" sub="What the Republic is wearing" />
-      <View style={styles.grid}>
-        {trending.map((p, i) => (
-          <ProductCard key={p.id} product={p} width={CARD} index={i} />
-        ))}
-      </View>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: TAB_SPACE + 24, paddingTop: 10 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* BENTO CATEGORY DIRECTORY */}
+        <View style={styles.catGrid}>
+          {CATEGORIES.map((item, i) => {
+            const c = COLLECTIONS.find((x) => x.slug === item.slug)!;
+            const list = productsIn(item.slug).filter(
+              (p) => segment === 'all' || p.gender === segment || p.gender === 'unisex'
+            );
+            return (
+              <Animated.View key={item.slug} entering={FadeInDown.delay(i * 30).duration(220)}>
+                <PressableScale
+                  scaleTo={0.97}
+                  onPress={() => router.push(`/collection/${item.slug}`)}
+                  style={[styles.catCard, { width: CARD, backgroundColor: item.tone }]}
+                >
+                  {c.image ? (
+                    <>
+                      <Img uri={c.image} style={StyleSheet.absoluteFill as object} contentPosition="top" />
+                      <LinearGradient
+                        colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.82)']}
+                        style={StyleSheet.absoluteFill}
+                      />
+                    </>
+                  ) : null}
+                  <View style={styles.catTop}>
+                    <View style={styles.catIconWrap}>
+                      <Ionicons name={item.icon} size={15} color="#fff" />
+                    </View>
+                    <View style={styles.catCountPill}>
+                      <Text style={styles.catCountText}>{list.length}</Text>
+                    </View>
+                  </View>
+                  <View>
+                    <Text style={styles.catTag}>{item.tag}</Text>
+                    <Text style={styles.catTitle} numberOfLines={1}>
+                      {item.slug === 'jackets-hoodies' ? 'Outerwear' : c.title}
+                    </Text>
+                  </View>
+                </PressableScale>
+              </Animated.View>
+            );
+          })}
+        </View>
 
-      <View style={{ height: 34 }} />
-      <SectionHeader title="Accessories" />
-      <View style={{ flexDirection: 'row', gap: 12, paddingHorizontal: PAD }}>
-        {['jewelry', 'hats'].map((s) => {
-          const c = COLLECTIONS.find((x) => x.slug === s)!;
-          return (
-            <PressableScale key={s} onPress={() => router.push(`/collection/${s}`)} style={styles.acc}>
-              <Text style={styles.accStar}>✱</Text>
-              <Text style={styles.accTitle}>{c.title}</Text>
-              <Text style={styles.accCount}>{productsIn(s).length} items</Text>
-            </PressableScale>
-          );
-        })}
-      </View>
-    </ScrollView>
+        {/* ARCHIVE SALE BANNER */}
+        <PressableScale
+          scaleTo={0.98}
+          onPress={() => router.push('/collection/sale')}
+          style={styles.saleBanner}
+        >
+          <View style={styles.saleBadge}>
+            <Text style={styles.saleBadgeText}>UP TO 65% OFF</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.saleTitle}>SEASON ARCHIVE SALE</Text>
+            <Text style={styles.saleSub}>Limited sizes remaining across varsity & jerseys</Text>
+          </View>
+          <View style={styles.saleArrow}>
+            <Ionicons name="arrow-forward" size={18} color={colors.ink} />
+          </View>
+        </PressableScale>
+
+        {/* TRENDING THIS WEEK */}
+        <View style={{ marginTop: 28 }}>
+          <SectionHeader
+            title="Most Wanted"
+            sub={`Top rated ${segment === 'all' ? 'pieces' : `${segment}'s pieces`} this week`}
+            action="See all"
+            onAction={() => router.push(`/collection/${segment === 'all' ? 'all' : segment}`)}
+          />
+          <View style={styles.grid}>
+            {trending.map((p, i) => (
+              <ProductCard key={p.id} product={p} width={CARD} index={i} />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  title: { fontFamily: fonts.black, fontSize: 34, color: colors.ink, paddingHorizontal: PAD, textTransform: 'uppercase' },
-  search: { marginHorizontal: PAD, marginTop: 14, marginBottom: 18, height: 50, borderRadius: 999, backgroundColor: colors.soft, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 18, gap: 10 },
-  searchText: { fontFamily: fonts.medium, fontSize: 14, color: colors.mute },
-  row: { height: 112, backgroundColor: '#111', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: PAD, overflow: 'hidden' },
-  rowTitle: { color: '#fff', fontFamily: fonts.black, fontSize: 24, textTransform: 'uppercase', letterSpacing: 0.5 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, rowGap: 22, paddingHorizontal: PAD },
-  acc: { flex: 1, height: 130, borderRadius: 24, backgroundColor: colors.ink, padding: 18, justifyContent: 'flex-end' },
-  accStar: { position: 'absolute', top: 14, right: 18, color: 'rgba(255,255,255,0.25)', fontSize: 40, fontFamily: fonts.black },
-  accTitle: { color: '#fff', fontFamily: fonts.black, fontSize: 20, textTransform: 'uppercase' },
-  accCount: { color: '#8c8982', fontFamily: fonts.medium, fontSize: 12, marginTop: 2 },
+  topHeader: {
+    paddingHorizontal: PAD,
+    paddingBottom: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.line,
+  },
+  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  title: { fontFamily: fonts.black, fontSize: 30, color: colors.ink, textTransform: 'uppercase' },
+  allBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: colors.soft,
+    paddingHorizontal: 12,
+    height: 32,
+    borderRadius: 999,
+  },
+  allBtnText: { fontFamily: fonts.heavy, fontSize: 11, color: colors.ink, textTransform: 'uppercase', letterSpacing: 0.6 },
+  search: {
+    marginTop: 12,
+    height: 44,
+    borderRadius: 13,
+    backgroundColor: colors.soft,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    gap: 10,
+  },
+  searchText: { fontFamily: fonts.medium, fontSize: 13.5, color: colors.mute },
+  segTrack: {
+    flexDirection: 'row',
+    backgroundColor: colors.soft,
+    borderRadius: 12,
+    padding: 3,
+    marginTop: 12,
+  },
+  segBtn: {
+    flex: 1,
+    height: 34,
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  segBtnOn: {
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+  },
+  segText: { fontFamily: fonts.bold, fontSize: 13, color: colors.mute },
+  segTextOn: { fontFamily: fonts.heavy, color: colors.ink },
+
+  catGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    paddingHorizontal: PAD,
+    marginTop: 6,
+  },
+  catCard: {
+    height: 148,
+    borderRadius: 20,
+    padding: 14,
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  catTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  catIconWrap: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  catCountPill: {
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 999,
+  },
+  catCountText: { color: '#fff', fontFamily: fonts.heavy, fontSize: 10 },
+  catTag: { color: 'rgba(255,255,255,0.72)', fontFamily: fonts.heavy, fontSize: 9.5, letterSpacing: 1.3 },
+  catTitle: { color: '#fff', fontFamily: fonts.black, fontSize: 18, textTransform: 'uppercase', marginTop: 2 },
+
+  saleBanner: {
+    marginHorizontal: PAD,
+    marginTop: 16,
+    backgroundColor: colors.accent,
+    borderRadius: 20,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  saleBadge: {
+    backgroundColor: 'rgba(0,0,0,0.22)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  saleBadgeText: { color: '#fff', fontFamily: fonts.black, fontSize: 10, letterSpacing: 1 },
+  saleTitle: { color: '#fff', fontFamily: fonts.black, fontSize: 16, textTransform: 'uppercase' },
+  saleSub: { color: 'rgba(255,255,255,0.85)', fontFamily: fonts.medium, fontSize: 11.5, marginTop: 2 },
+  saleArrow: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, rowGap: 20, paddingHorizontal: PAD },
 });

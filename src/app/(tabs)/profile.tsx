@@ -54,14 +54,21 @@ export default function Profile() {
 
   return (
     <ScrollView contentContainerStyle={{ paddingTop: insets.top + 12, paddingBottom: TAB_SPACE + 20 }} showsVerticalScrollIndicator={false}>
-      <Animated.View entering={FadeInDown.springify().damping(17)} style={styles.card}>
+      <Animated.View entering={FadeInDown.duration(240)} style={styles.card}>
         <Text style={styles.cardStar}>✱</Text>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{initials(user?.name ?? '')}</Text>
+        <View style={styles.cardHeaderRow}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{initials(user?.name ?? '')}</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <View style={styles.tierPill}>
+              <View style={styles.tierDot} />
+              <Text style={styles.tierText}>REPUBLIC PASS · SINCE {user?.since ?? new Date().getFullYear()}</Text>
+            </View>
+            <Text style={styles.name} numberOfLines={1}>{user?.name ?? 'Guest'}</Text>
+            <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
+          </View>
         </View>
-        <Text style={styles.name}>{user?.name ?? 'Guest'}</Text>
-        <Text style={styles.email}>{user?.email}</Text>
-        <Text style={styles.since}>ZR MEMBER · SINCE {user?.since ?? new Date().getFullYear()}</Text>
         <View style={styles.stats}>
           <Stat n={orders} label="Orders" onPress={() => router.push('/orders')} />
           <View style={styles.vr} />
@@ -73,7 +80,7 @@ export default function Profile() {
 
       <View style={{ paddingHorizontal: PAD, marginTop: 22 }}>
         {MENU.map((m, i) => (
-          <Animated.View key={m.label} entering={FadeInDown.delay(120 + i * 50).springify().damping(18)}>
+          <Animated.View key={m.label} entering={FadeInDown.delay(i * 25).duration(200)}>
             <PressableScale scaleTo={0.985} onPress={m.onPress} style={styles.row}>
               <View style={styles.rowIcon}>
                 <Ionicons name={m.icon} size={19} color={colors.ink} />
@@ -143,14 +150,17 @@ function Stat({ n, label, onPress }: { n: number; label: string; onPress: () => 
 }
 
 const styles = StyleSheet.create({
-  card: { marginHorizontal: PAD, backgroundColor: colors.ink, borderRadius: 30, padding: 24, alignItems: 'center', overflow: 'hidden' },
-  cardStar: { position: 'absolute', right: -14, top: -22, fontSize: 140, color: 'rgba(255,255,255,0.05)', fontFamily: fonts.black },
-  avatar: { width: 76, height: 76, borderRadius: 38, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
-  avatarText: { fontFamily: fonts.black, fontSize: 26, color: colors.ink },
-  name: { color: '#fff', fontFamily: fonts.black, fontSize: 22, marginTop: 14, textTransform: 'uppercase' },
-  email: { color: '#a3a099', fontFamily: fonts.medium, fontSize: 13, marginTop: 3 },
-  since: { color: '#6d6a64', fontFamily: fonts.heavy, fontSize: 10, letterSpacing: 2.5, marginTop: 12 },
-  stats: { flexDirection: 'row', alignItems: 'center', marginTop: 22, alignSelf: 'stretch', backgroundColor: '#1b1b1b', borderRadius: 20, paddingVertical: 14 },
+  card: { marginHorizontal: PAD, backgroundColor: colors.ink, borderRadius: 26, padding: 20, overflow: 'hidden' },
+  cardStar: { position: 'absolute', right: -14, top: -26, fontSize: 130, color: 'rgba(255,255,255,0.05)', fontFamily: fonts.black },
+  cardHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  avatar: { width: 62, height: 62, borderRadius: 31, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
+  avatarText: { fontFamily: fonts.black, fontSize: 22, color: colors.ink },
+  tierPill: { flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.1)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 999, marginBottom: 5 },
+  tierDot: { width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#12B76A' },
+  tierText: { color: '#d0cdc6', fontFamily: fonts.heavy, fontSize: 9, letterSpacing: 1.5 },
+  name: { color: '#fff', fontFamily: fonts.black, fontSize: 20, textTransform: 'uppercase' },
+  email: { color: '#a3a099', fontFamily: fonts.medium, fontSize: 12.5, marginTop: 2 },
+  stats: { flexDirection: 'row', alignItems: 'center', marginTop: 18, alignSelf: 'stretch', backgroundColor: '#181818', borderRadius: 16, paddingVertical: 12 },
   vr: { width: 1, height: 28, backgroundColor: '#2c2c2c' },
   statN: { color: '#fff', fontFamily: fonts.black, fontSize: 20 },
   statL: { color: '#8c8982', fontFamily: fonts.medium, fontSize: 12, marginTop: 2 },

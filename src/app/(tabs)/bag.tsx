@@ -31,7 +31,7 @@ export default function Bag() {
   const remaining = Math.max(0, FREE_SHIPPING_AT - (t.subtotal - t.discount));
   const prog = useSharedValue(0);
   useEffect(() => {
-    prog.value = withSpring(Math.min(1, (t.subtotal - t.discount) / FREE_SHIPPING_AT), { damping: 18 });
+    prog.value = withSpring(Math.min(1, (t.subtotal - t.discount) / FREE_SHIPPING_AT), { damping: 28, stiffness: 360 });
   }, [t.subtotal, t.discount, prog]);
   const barStyle = useAnimatedStyle(() => ({ width: `${prog.value * 100}%` }));
 
@@ -71,7 +71,7 @@ export default function Bag() {
               const p = getProduct(c.productId)!;
               const v = p.variants.find((x) => x.color === c.color) ?? p.variants[0];
               return (
-                <Animated.View key={c.key} layout={LinearTransition.springify().damping(18)} exiting={SlideOutLeft.duration(220)} entering={FadeInDown.springify().damping(18)} style={styles.item}>
+                <Animated.View key={c.key} layout={LinearTransition.duration(200)} exiting={SlideOutLeft.duration(180)} entering={FadeInDown.duration(200)} style={styles.item}>
                   <PressableScale onPress={() => router.push(`/product/${p.id}`)}>
                     <Img uri={v.image} tone={v.hex + '33'} label={p.name} style={styles.thumb} />
                   </PressableScale>

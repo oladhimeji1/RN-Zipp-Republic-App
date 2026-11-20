@@ -25,8 +25,8 @@ export function ToastHost() {
     <View pointerEvents="box-none" style={[StyleSheet.absoluteFill, { zIndex: 999 }]}>
       <Animated.View
         key={t.id}
-        entering={FadeInUp.springify().damping(16)}
-        exiting={FadeOutUp.duration(180)}
+        entering={FadeInUp.duration(200)}
+        exiting={FadeOutUp.duration(160)}
         style={[styles.toast, { top: insets.top + 10 }]}
       >
         <Text style={styles.text} numberOfLines={2}>

@@ -55,21 +55,21 @@ export default function OrderSuccess() {
         ))}
       </View>
       <View style={styles.mid}>
-        <Animated.View entering={ZoomIn.delay(150).springify().damping(8)}>
+        <Animated.View entering={ZoomIn.delay(80).duration(260)}>
           <SuccessBadge size={110} />
         </Animated.View>
-        <Animated.Text entering={FadeInDown.delay(500).springify()} style={styles.title}>
+        <Animated.Text entering={FadeInDown.delay(220).duration(240)} style={styles.title}>
           Order placed
         </Animated.Text>
-        <Animated.Text entering={FadeInDown.delay(650).springify()} style={styles.text}>
+        <Animated.Text entering={FadeInDown.delay(300).duration(240)} style={styles.text}>
           Thank you for shopping the Republic. Your order is confirmed and we are getting it ready.
         </Animated.Text>
-        <Animated.View entering={FadeInDown.delay(800).springify()} style={styles.box}>
+        <Animated.View entering={FadeInDown.delay(380).duration(240)} style={styles.box}>
           <Text style={styles.boxLabel}>ORDER NUMBER</Text>
           <Text style={styles.boxValue}>{id}</Text>
         </Animated.View>
       </View>
-      <Animated.View entering={FadeInDown.delay(950).springify()} style={{ gap: 12 }}>
+      <Animated.View entering={FadeInDown.delay(450).duration(240)} style={{ gap: 12 }}>
         <Button title="Track order" onPress={() => router.replace(`/orders/${id}`)} />
         <Button title="Continue shopping" variant="outline" onPress={() => router.replace('/(tabs)')} />
       </Animated.View>

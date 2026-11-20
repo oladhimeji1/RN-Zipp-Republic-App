@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { H, colors } from '@/lib/theme';
+import { H, colors, spring } from '@/lib/theme';
 
 interface Props {
   visible: boolean;
@@ -19,16 +19,16 @@ export function Sheet({ visible, onClose, children, dark }: Props) {
   useEffect(() => {
     if (visible) {
       setMounted(true);
-      p.value = withTiming(1, { duration: 320, easing: Easing.out(Easing.cubic) });
+      p.value = withSpring(1, spring.sheet);
     } else {
-      p.value = withTiming(0, { duration: 240, easing: Easing.in(Easing.cubic) }, (done) => {
+      p.value = withTiming(0, { duration: 180, easing: Easing.in(Easing.quad) }, (done) => {
         if (done) runOnJS(setMounted)(false);
       });
     }
   }, [visible, p]);
 
   const back = useAnimatedStyle(() => ({ opacity: p.value * 0.55 }));
-  const panel = useAnimatedStyle(() => ({ transform: [{ translateY: (1 - p.value) * H * 0.6 }], opacity: 0.2 + p.value * 0.8 }));
+  const panel = useAnimatedStyle(() => ({ transform: [{ translateY: (1 - p.value) * H * 0.5 }], opacity: 0.35 + p.value * 0.65 }));
 
   return (
     <Modal visible={mounted} transparent animationType="none" onRequestClose={onClose} statusBarTranslucent>

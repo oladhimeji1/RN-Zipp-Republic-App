@@ -14,27 +14,27 @@ export default function Greeting() {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    const t = setTimeout(() => router.replace('/personalise'), 3600);
+    const t = setTimeout(() => router.replace('/personalise'), 2200);
     return () => clearTimeout(t);
   }, [router]);
 
   return (
     <Pressable style={[styles.root, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 20 }]} onPress={() => router.replace('/personalise')}>
-      <Animated.View entering={FadeIn.duration(700)}>
+      <Animated.View entering={FadeIn.duration(350)}>
         <SpinningStar size={34} color="#fff" />
       </Animated.View>
       <View style={styles.mid}>
-        <Animated.Text entering={FadeInDown.delay(500).duration(600)} style={styles.hi}>
+        <Animated.Text entering={FadeInDown.delay(150).duration(300)} style={styles.hi}>
           Hi
         </Animated.Text>
-        <Animated.Text entering={FadeInDown.delay(800).springify().damping(15)} style={styles.name} numberOfLines={2} adjustsFontSizeToFit>
+        <Animated.Text entering={FadeInDown.delay(260).duration(320)} style={styles.name} numberOfLines={2} adjustsFontSizeToFit>
           {firstName(user?.name ?? '')}
         </Animated.Text>
-        <Animated.Text entering={FadeInDown.delay(1200).duration(700)} style={styles.text}>
+        <Animated.Text entering={FadeInDown.delay(380).duration(320)} style={styles.text}>
           Welcome to the Republic. Give us a minute and we will tailor the store to you.
         </Animated.Text>
       </View>
-      <Animated.Text entering={FadeInUp.delay(1700).duration(700)} style={styles.since}>
+      <Animated.Text entering={FadeInUp.delay(500).duration(320)} style={styles.since}>
         MEMBER SINCE {user?.since ?? new Date().getFullYear()}
       </Animated.Text>
     </Pressable>

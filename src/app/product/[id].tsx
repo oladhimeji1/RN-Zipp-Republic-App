@@ -42,13 +42,13 @@ function Dot({ i, x }: { i: number; x: { value: number } }) {
 function Accordion({ title, children, open: initial = false }: { title: string; children: React.ReactNode; open?: boolean }) {
   const [open, setOpen] = useState(initial);
   return (
-    <Animated.View layout={LinearTransition.springify().damping(20)} style={styles.acc}>
+    <Animated.View layout={LinearTransition.duration(200)} style={styles.acc}>
       <PressableScale scaleTo={0.99} onPress={() => setOpen((o) => !o)} style={styles.accHead}>
         <Text style={styles.accTitle}>{title}</Text>
         <Ionicons name={open ? 'remove' : 'add'} size={20} color={colors.ink} />
       </PressableScale>
       {open ? (
-        <Animated.View entering={FadeIn.duration(220)} style={{ paddingBottom: 16 }}>
+        <Animated.View entering={FadeIn.duration(180)} style={{ paddingBottom: 16 }}>
           {children}
         </Animated.View>
       ) : null}
@@ -143,22 +143,25 @@ export default function ProductScreen() {
         </View>
 
         <View style={styles.info}>
-          <Animated.View entering={FadeInDown.delay(80).springify().damping(18)}>
-            <Text style={styles.vendor}>ZIPP REPUBLIC{isPre ? ' · PRE-ORDER' : ''}</Text>
+          <View style={styles.sheetPull} />
+          <Animated.View entering={FadeInDown.duration(220)}>
+            <View style={styles.vendorRow}>
+              <Text style={styles.vendor}>ZIPP REPUBLIC{isPre ? ' · PRE-ORDER' : ''}</Text>
+              <View style={styles.ratingPill}>
+                <Ionicons name="star" size={12} color={colors.ink} />
+                <Text style={styles.rating}>{product.rating.toFixed(1)}</Text>
+                <Text style={styles.reviews}>({product.reviews})</Text>
+              </View>
+            </View>
             <Text style={styles.name}>{product.name}</Text>
             <View style={styles.priceRow}>
               <Text style={styles.price}>{naira(product.price)}</Text>
               {product.compareAt ? <Text style={styles.compare}>{naira(product.compareAt)}</Text> : null}
               {pct ? (
                 <View style={styles.pct}>
-                  <Text style={styles.pctText}>-{pct}%</Text>
+                  <Text style={styles.pctText}>SAVE {pct}%</Text>
                 </View>
               ) : null}
-            </View>
-            <View style={styles.ratingRow}>
-              <Ionicons name="star" size={14} color={colors.ink} />
-              <Text style={styles.rating}>{product.rating.toFixed(1)}</Text>
-              <Text style={styles.reviews}>({product.reviews} reviews)</Text>
             </View>
             <Text style={styles.blurb}>{product.blurb}</Text>
           </Animated.View>
@@ -341,19 +344,21 @@ function GuideTable({ head, rows }: { head: string[]; rows: string[][] }) {
 }
 
 const styles = StyleSheet.create({
-  dots: { position: 'absolute', bottom: 46, alignSelf: 'center', flexDirection: 'row', gap: 6 },
+  dots: { position: 'absolute', bottom: 42, alignSelf: 'center', flexDirection: 'row', gap: 6, backgroundColor: 'rgba(0,0,0,0.28)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999 },
   dot: { height: 6, borderRadius: 3, backgroundColor: '#fff' },
-  info: { marginTop: -28, backgroundColor: '#fff', borderTopLeftRadius: 28, borderTopRightRadius: 28, paddingHorizontal: PAD, paddingTop: 24 },
+  info: { marginTop: -26, backgroundColor: '#fff', borderTopLeftRadius: 28, borderTopRightRadius: 28, paddingHorizontal: PAD, paddingTop: 12 },
+  sheetPull: { width: 38, height: 4, borderRadius: 2, backgroundColor: colors.line, alignSelf: 'center', marginBottom: 14 },
+  vendorRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   vendor: { fontFamily: fonts.heavy, fontSize: 11, letterSpacing: 2, color: colors.mute },
-  name: { fontFamily: fonts.black, fontSize: 26, lineHeight: 29, color: colors.ink, marginTop: 6, textTransform: 'uppercase' },
-  priceRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 12 },
+  ratingPill: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.soft, paddingHorizontal: 9, paddingVertical: 4, borderRadius: 999 },
+  name: { fontFamily: fonts.black, fontSize: 25, lineHeight: 28, color: colors.ink, marginTop: 6, textTransform: 'uppercase' },
+  priceRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 },
   price: { fontFamily: fonts.black, fontSize: 22, color: colors.ink },
   compare: { fontFamily: fonts.medium, fontSize: 15, color: colors.mute, textDecorationLine: 'line-through' },
-  pct: { backgroundColor: colors.accent, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
-  pctText: { color: '#fff', fontFamily: fonts.heavy, fontSize: 11 },
-  ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 10 },
-  rating: { fontFamily: fonts.heavy, fontSize: 13, color: colors.ink },
-  reviews: { fontFamily: fonts.medium, fontSize: 13, color: colors.mute },
+  pct: { backgroundColor: colors.accent, borderRadius: 7, paddingHorizontal: 8, paddingVertical: 3 },
+  pctText: { color: '#fff', fontFamily: fonts.heavy, fontSize: 10, letterSpacing: 0.6 },
+  rating: { fontFamily: fonts.heavy, fontSize: 12, color: colors.ink },
+  reviews: { fontFamily: fonts.medium, fontSize: 11.5, color: colors.mute },
   blurb: { fontFamily: fonts.medium, fontSize: 14, lineHeight: 21, color: colors.body, marginTop: 14 },
   label: { fontFamily: fonts.heavy, fontSize: 11, letterSpacing: 2, color: colors.mute, marginTop: 24 },
   swatches: { flexDirection: 'row', gap: 12, marginTop: 12 },

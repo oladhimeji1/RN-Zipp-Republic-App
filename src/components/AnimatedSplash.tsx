@@ -26,18 +26,18 @@ export function AnimatedSplash({ ready, onDone }: { ready: boolean; onDone: () =
   const tryExit = () => {
     if (exited.current || !minElapsed.current) return;
     exited.current = true;
-    out.value = withTiming(0, { duration: 500, easing: Easing.out(Easing.quad) }, (fin) => {
+    out.value = withTiming(0, { duration: 280, easing: Easing.out(Easing.quad) }, (fin) => {
       if (fin) runOnJS(onDone)();
     });
   };
 
   useEffect(() => {
-    star.value = withSpring(1, { damping: 11, stiffness: 90 });
-    tone.value = withDelay(1500, withTiming(1, { duration: 600 }));
+    star.value = withSpring(1, { damping: 20, stiffness: 260, mass: 0.7 });
+    tone.value = withDelay(750, withTiming(1, { duration: 380 }));
     const t = setTimeout(() => {
       minElapsed.current = true;
       tryExit();
-    }, 2700);
+    }, 1450);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -64,14 +64,14 @@ export function AnimatedSplash({ ready, onDone }: { ready: boolean; onDone: () =
         {WORD.map((c, i) => (
           <Animated.Text
             key={i}
-            entering={FadeInDown.delay(650 + i * 50).springify().damping(14)}
+            entering={FadeInDown.delay(220 + i * 28).duration(240)}
             style={[styles.letter, fg, c === ' ' && { width: 12 }]}
           >
             {c}
           </Animated.Text>
         ))}
       </View>
-      <Animated.Text entering={FadeIn.delay(1500).duration(600)} style={[styles.sub, fg]}>
+      <Animated.Text entering={FadeIn.delay(680).duration(350)} style={[styles.sub, fg]}>
         AFFORDABLE LUXURY
       </Animated.Text>
     </Animated.View>

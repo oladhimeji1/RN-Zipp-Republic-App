@@ -114,7 +114,7 @@ export default function Checkout() {
 
       <ScrollView contentContainerStyle={{ padding: PAD, paddingBottom: 140 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         {step === 0 && (
-          <Animated.View key="s0" entering={FadeInDown.springify().damping(18)}>
+          <Animated.View key="s0" entering={FadeInDown.duration(200)}>
             <Text style={styles.h}>Delivery address</Text>
             {addresses.map((a) => (
               <PressableScale key={a.id} scaleTo={0.985} onPress={() => { select(); setAddrId(a.id); setAdding(false); }} style={[styles.opt, addrId === a.id && !adding && styles.optOn]}>
@@ -164,7 +164,7 @@ export default function Checkout() {
         )}
 
         {step === 1 && (
-          <Animated.View key="s1" entering={FadeInDown.springify().damping(18)}>
+          <Animated.View key="s1" entering={FadeInDown.duration(200)}>
             <Text style={styles.h}>Payment method</Text>
             {PAYMENTS.map((p) => (
               <PressableScale key={p.id} scaleTo={0.985} onPress={() => { select(); setPayment(p.id); }} style={[styles.opt, payment === p.id && styles.optOn]}>
@@ -214,7 +214,7 @@ export default function Checkout() {
         )}
 
         {step === 2 && (
-          <Animated.View key="s2" entering={FadeInDown.springify().damping(18)}>
+          <Animated.View key="s2" entering={FadeInDown.duration(200)}>
             <Text style={styles.h}>Review your order</Text>
             {cart.map((c) => {
               const p = getProduct(c.productId)!;

@@ -25,7 +25,7 @@ export default function Addresses() {
       <ScrollView contentContainerStyle={{ padding: PAD, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
         {addresses.length === 0 ? <EmptyState title="No addresses yet" text="Add a delivery address to check out faster." /> : null}
         {addresses.map((a, i) => (
-          <Animated.View key={a.id} layout={LinearTransition.springify()} exiting={SlideOutLeft} entering={FadeInDown.delay(i * 60).springify().damping(18)} style={styles.card}>
+          <Animated.View key={a.id} layout={LinearTransition.duration(200)} exiting={SlideOutLeft.duration(180)} entering={FadeInDown.delay(i * 35).duration(200)} style={styles.card}>
             <View style={styles.top}>
               <View style={styles.tag}>
                 <Ionicons name={a.label === 'Work' ? 'briefcase-outline' : a.label === 'Home' ? 'home-outline' : 'location-outline'} size={14} color={colors.ink} />

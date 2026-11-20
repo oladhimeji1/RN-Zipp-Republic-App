@@ -45,13 +45,13 @@ export default function SignIn() {
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#fff' }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScreenHeader />
       <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        <Animated.Text entering={FadeInDown.delay(60).springify()} style={styles.title}>
+        <Animated.Text entering={FadeInDown.delay(30).duration(220)} style={styles.title}>
           Welcome back
         </Animated.Text>
-        <Animated.Text entering={FadeInDown.delay(120).springify()} style={styles.sub}>
+        <Animated.Text entering={FadeInDown.delay(70).duration(220)} style={styles.sub}>
           Sign in to pick up where you left off.
         </Animated.Text>
-        <Animated.View entering={FadeInDown.delay(180).springify()}>
+        <Animated.View entering={FadeInDown.delay(110).duration(220)}>
           <SocialRow onPress={() => enter('Zipp Member', 'member@zipprepublic.test')} />
           <OrDivider />
           <Input label="Email address" placeholder="you@example.com" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" error={tried && !EMAIL.test(email.trim()) ? 'Enter a valid email address' : null} />

@@ -57,7 +57,7 @@ export default function Collection() {
         columnWrapperStyle={{ gap: 12, paddingHorizontal: PAD }}
         contentContainerStyle={{ paddingBottom: 50, rowGap: 22 }}
         ListHeaderComponent={
-          <Animated.View entering={FadeInDown.springify()} style={{ marginBottom: 6 }}>
+          <Animated.View entering={FadeInDown.duration(200)} style={{ marginBottom: 6 }}>
             <Text style={styles.sub}>{col.subtitle}</Text>
             <View style={styles.filters}>
               <View style={{ flexDirection: 'row', gap: 8 }}>

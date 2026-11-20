@@ -19,12 +19,12 @@ const ICONS: Record<string, { on: keyof typeof Ionicons.glyphMap; off: keyof typ
 
 function Item({ name, focused, onPress, badge }: { name: string; focused: boolean; onPress: () => void; badge?: number }) {
   const meta = ICONS[name];
-  const p = useDerivedValue(() => withSpring(focused ? 1 : 0, { damping: 16, stiffness: 180 }));
+  const p = useDerivedValue(() => withSpring(focused ? 1 : 0, { damping: 26, stiffness: 360, mass: 0.7 }));
   const box = useAnimatedStyle(() => ({
-    width: 46 + p.value * 40,
+    width: 48 + p.value * 44,
     backgroundColor: `rgba(255,255,255,${p.value * 1})`,
   }));
-  const label = useAnimatedStyle(() => ({ opacity: p.value, width: p.value * 40, transform: [{ translateX: (1 - p.value) * -6 }] }));
+  const label = useAnimatedStyle(() => ({ opacity: p.value, width: p.value * 44, transform: [{ translateX: (1 - p.value) * -4 }] }));
   return (
     <PressableScale onPress={onPress} scaleTo={0.9}>
       <Animated.View style={[styles.item, box]}>

@@ -27,7 +27,7 @@ export default function Orders() {
           const stage = orderStage(o, now);
           const done = stage === 3;
           return (
-            <Animated.View key={o.id} entering={FadeInDown.delay(i * 70).springify().damping(18)}>
+            <Animated.View key={o.id} entering={FadeInDown.delay(i * 35).duration(200)}>
               <PressableScale onPress={() => router.push(`/orders/${o.id}`)} style={styles.card}>
                 <View style={styles.top}>
                   <View>
