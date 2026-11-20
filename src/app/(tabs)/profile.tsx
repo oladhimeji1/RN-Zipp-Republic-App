@@ -48,6 +48,7 @@ export default function Profile() {
     { icon: 'location-outline', label: 'Addresses', onPress: () => router.push('/addresses') },
     { icon: 'card-outline', label: 'Payment methods', onPress: () => setPay(true) },
     { icon: 'resize-outline', label: 'Size preferences', sub: [prefs.topSize, prefs.slideSize && `EU ${prefs.slideSize}`].filter(Boolean).join(' · ') || 'Not set', onPress: () => setSizes(true) },
+    { icon: 'sparkles-outline', label: 'Replay onboarding', sub: 'Welcome & personalisation flow', onPress: () => router.push('/welcome') },
     { icon: 'logo-instagram', label: 'Follow @zipprepublic', onPress: () => Linking.openURL('https://www.instagram.com/zipprepublic').catch(() => {}) },
     { icon: 'help-buoy-outline', label: 'Help & support', onPress: () => Linking.openURL('https://shopzipprepublic.com/policies/contact-information').catch(() => {}) },
   ];

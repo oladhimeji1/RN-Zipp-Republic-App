@@ -57,6 +57,7 @@ const lineKey = (productId: string, color: string, size: string) => `${productId
 interface State {
   user: User | null;
   prefs: Prefs;
+  onboarded: boolean;
   cart: CartItem[];
   wishlist: string[];
   orders: Order[];
@@ -69,6 +70,7 @@ interface State {
   signIn: (name: string, email: string) => void;
   signOut: () => void;
   setPrefs: (p: Partial<Prefs>) => void;
+  setOnboarded: (v: boolean) => void;
   addToCart: (productId: string, color: string, size: string, qty: number) => void;
   setQty: (key: string, qty: number) => void;
   removeItem: (key: string) => void;
@@ -122,6 +124,7 @@ export const useStore = create<State>()(
     (set, get) => ({
       user: null,
       prefs: { shopFor: null, topSize: null, slideSize: null },
+      onboarded: false,
       cart: [],
       wishlist: [],
       orders: [seedOrder],
@@ -136,8 +139,9 @@ export const useStore = create<State>()(
           user: { name, email, since: s.user?.since ?? new Date().getFullYear() },
           addresses: s.addresses.map((a) => (a.id === 'addr-seed' ? { ...a, fullName: name } : a)),
         })),
-      signOut: () => set({ user: null, cart: [], promo: null }),
+      signOut: () => set({ user: null, onboarded: false, cart: [], promo: null }),
       setPrefs: (p) => set((s) => ({ prefs: { ...s.prefs, ...p } })),
+      setOnboarded: (v) => set({ onboarded: v }),
 
       addToCart: (productId, color, size, qty) =>
         set((s) => {
@@ -213,6 +217,7 @@ export const useStore = create<State>()(
       partialize: (s) => ({
         user: s.user,
         prefs: s.prefs,
+        onboarded: s.onboarded,
         cart: s.cart,
         wishlist: s.wishlist,
         orders: s.orders,

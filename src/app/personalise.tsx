@@ -46,6 +46,7 @@ export default function Personalise() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const setPrefs = useStore((s) => s.setPrefs);
+  const setOnboarded = useStore((s) => s.setOnboarded);
   const [step, setStep] = useState(-1); // -1 = intro
   const [shopFor, setShopFor] = useState<'men' | 'women' | 'both' | null>(null);
   const [top, setTop] = useState<string | null>(null);
@@ -57,6 +58,7 @@ export default function Personalise() {
 
   const finish = (p: { shopFor?: typeof shopFor; top?: string | null; slide?: string | null }) => {
     setPrefs({ shopFor: p.shopFor ?? shopFor, topSize: p.top ?? top, slideSize: p.slide ?? slide });
+    setOnboarded(true);
     router.replace('/(tabs)');
   };
 

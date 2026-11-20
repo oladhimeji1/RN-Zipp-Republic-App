@@ -31,7 +31,7 @@ export default function Welcome() {
           <Text style={styles.star}>✱</Text>
           <Text style={styles.brandText}>ZIPP REPUBLIC</Text>
         </View>
-        <PressableScale onPress={() => router.replace('/(tabs)')} style={styles.guestPill}>
+        <PressableScale onPress={() => router.replace('/personalise')} style={styles.guestPill}>
           <Text style={styles.guestText}>Explore as Guest</Text>
         </PressableScale>
       </Animated.View>

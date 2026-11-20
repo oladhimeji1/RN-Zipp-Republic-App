@@ -55,7 +55,9 @@ export default function RootLayout() {
         <AnimatedSplash
           ready={hydrated}
           onDone={() => {
-            if (!useStore.getState().user) router.replace('/welcome');
+            const s = useStore.getState();
+            if (!s.user) router.replace('/welcome');
+            else if (!s.onboarded) router.replace('/greeting');
             setSplashDone(true);
           }}
         />
