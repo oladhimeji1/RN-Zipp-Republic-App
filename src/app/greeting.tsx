@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SpinningStar } from '@/components/Common';
+import { LOGO_WHITE } from '@/lib/data';
 import { firstName } from '@/lib/format';
 import { useStore } from '@/lib/store';
 import { PAD, fonts } from '@/lib/theme';
@@ -21,7 +22,7 @@ export default function Greeting() {
   return (
     <Pressable style={[styles.root, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 20 }]} onPress={() => router.replace('/personalise')}>
       <Animated.View entering={FadeIn.duration(350)}>
-        <SpinningStar size={34} color="#fff" />
+        <Image source={LOGO_WHITE} style={{ width: 140, height: 27 }} contentFit="contain" />
       </Animated.View>
       <View style={styles.mid}>
         <Animated.Text entering={FadeInDown.delay(150).duration(300)} style={styles.hi}>

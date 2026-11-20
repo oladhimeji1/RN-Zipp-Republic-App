@@ -2,10 +2,16 @@ import { SectionHeader } from "@/components/Common";
 import { Img } from "@/components/Img";
 import { PressableScale } from "@/components/PressableScale";
 import { ProductCard } from "@/components/ProductCard";
-import { COLLECTIONS, HERO_IMAGE, PRODUCTS, productsIn } from "@/lib/data";
+import {
+  COLLECTIONS,
+  HERO_IMAGE,
+  LOGO_WHITE,
+  PRODUCTS,
+  productsIn,
+} from "@/lib/data";
 import { firstName, initials, naira } from "@/lib/format";
 import { select, success } from "@/lib/haptics";
-import { ORDER_STAGES, orderStage, useCartCount, useStore } from "@/lib/store";
+import { orderStage, useCartCount, useStore } from "@/lib/store";
 import { PAD, TAB_SPACE, W, colors, fonts } from "@/lib/theme";
 import { showToast } from "@/lib/toast";
 import { Ionicons } from "@expo/vector-icons";
@@ -82,9 +88,14 @@ export default function Home() {
           </View>
           <View>
             <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
             >
-              <Text style={styles.brandTitle}>ZIPP REPUBLIC</Text>
+              <Image
+                source={LOGO_WHITE}
+                style={{ width: 118, height: 22 }}
+                tintColor={colors.ink}
+                contentFit="contain"
+              />
               <View style={styles.liveDot} />
             </View>
             <Text style={styles.greeting}>
@@ -176,45 +187,6 @@ export default function Home() {
           })}
         </ScrollView>
 
-        {/* ACTIVE ORDER LIVE ACTIVITY WIDGET (WHEN PRESENT) */}
-        {latestOrder ? (
-          <PressableScale
-            scaleTo={0.985}
-            onPress={() => router.push(`/orders/${latestOrder.id}`)}
-            style={styles.orderWidget}
-          >
-            <View style={styles.orderIconBox}>
-              <Ionicons
-                name={latestStage === 3 ? "checkmark-done" : "cube"}
-                size={18}
-                color="#fff"
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <View
-                style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
-              >
-                <Text style={styles.orderWidgetTag}>
-                  ORDER {latestOrder.id}
-                </Text>
-                <View style={styles.orderStatusPill}>
-                  <Text style={styles.orderStatusText}>
-                    {ORDER_STAGES[latestStage]}
-                  </Text>
-                </View>
-              </View>
-              <Text style={styles.orderWidgetSub} numberOfLines={1}>
-                {latestOrder.lines[0]?.name}
-                {latestOrder.lines.length > 1
-                  ? ` +${latestOrder.lines.length - 1} more`
-                  : ""}{" "}
-                · Tap to track
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={18} color={colors.mute} />
-          </PressableScale>
-        ) : null}
-
         {/* FEATURED DROP CARD (APP EDITORIAL) */}
         {cat === "all" || cat === "new" ? (
           <Animated.View
@@ -242,10 +214,10 @@ export default function Home() {
                 style={StyleSheet.absoluteFill}
               />
               <View style={styles.heroTopRow}>
-                <View style={styles.dropBadge}>
+                {/* <View style={styles.dropBadge}>
                   <View style={styles.dropPulse} />
                   <Text style={styles.dropBadgeText}>DROP 02 · LIVE NOW</Text>
-                </View>
+                </View> */}
                 <View style={styles.exclusivesBadge}>
                   <Text style={styles.exclusivesText}>APP EXCLUSIVE</Text>
                 </View>
@@ -265,7 +237,7 @@ export default function Home() {
                       color={colors.ink}
                     />
                   </View>
-                  <Text style={styles.heroPriceTag}>From {naira(35000)}</Text>
+                  <Text style={styles.heroPriceTag}>From {naira(60750)}</Text>
                 </View>
               </View>
             </PressableScale>
@@ -643,7 +615,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 6,
     backgroundColor: "rgba(10,10,10,0.72)",
-    paddingHorizontal: 11,
+    paddingHorizontal: 7,
     paddingVertical: 6,
     borderRadius: 999,
   },
@@ -656,12 +628,12 @@ const styles = StyleSheet.create({
   dropBadgeText: {
     color: "#fff",
     fontFamily: fonts.heavy,
-    fontSize: 10,
+    fontSize: 8,
     letterSpacing: 1.4,
   },
   exclusivesBadge: {
     backgroundColor: "rgba(255,255,255,0.2)",
-    paddingHorizontal: 10,
+    paddingHorizontal: 7,
     paddingVertical: 5,
     borderRadius: 999,
   },
@@ -681,7 +653,7 @@ const styles = StyleSheet.create({
   heroTitle: {
     color: "#fff",
     fontFamily: fonts.black,
-    fontSize: 34,
+    fontSize: 30,
     lineHeight: 36,
     letterSpacing: 0.4,
   },
@@ -697,7 +669,7 @@ const styles = StyleSheet.create({
     gap: 7,
     backgroundColor: "#fff",
     paddingHorizontal: 16,
-    height: 40,
+    height: 30,
     borderRadius: 999,
   },
   heroCtaText: {

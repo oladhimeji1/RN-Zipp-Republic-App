@@ -25,7 +25,7 @@ const CATEGORIES: { slug: string; tag: string; icon: keyof typeof Ionicons.glyph
   { slug: 'tshirts', tag: 'JERSEYS & TEES', icon: 'shirt-outline', tone: '#1D2939' },
   { slug: 'slides', tag: 'FOOTWEAR', icon: 'footsteps-outline', tone: '#2C241D' },
   { slug: 'jackets-hoodies', tag: 'OUTERWEAR', icon: 'snow-outline', tone: '#1F2421' },
-  { slug: 'jewelry', tag: 'WATCHES & CHAINS', icon: 'watch-outline', tone: '#3A2E1E' },
+  { slug: 'jewelry', tag: 'EARRINGS & STUDS', icon: 'sparkles-outline', tone: '#3A2E1E' },
   { slug: 'hats', tag: 'HEADWEAR', icon: 'sunny-outline', tone: '#252525' },
 ];
 

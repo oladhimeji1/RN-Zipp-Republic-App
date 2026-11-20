@@ -51,8 +51,6 @@ export default function SignUp() {
     signIn(n, e);
     setDone(true);
     success();
-    pop.value = withDelay(150, withSpring(1, { damping: 9, stiffness: 120 }));
-    setTimeout(() => router.replace("/greeting"), 1900);
     pop.value = withDelay(80, withSpring(1, { damping: 18, stiffness: 280 }));
     setTimeout(() => router.replace("/greeting"), 1200);
   };
