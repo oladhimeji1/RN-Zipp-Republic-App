@@ -1,56 +1,40 @@
-# Welcome to your Expo app 👋
+# Zipp Republic: React Native (Expo) store app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Dummy-data ecommerce app inspired by a Flutter sneaker-app screen recording, rebuilt around the
+Zipp Republic brand (shopzipprepublic.com): black and white, red accent, Archivo + DM Serif italic,
+"Luxury & Lifestyle", marquee tickers, Naira pricing, the real collections (Men, Women, Tshirts,
+Jackets & Hoodies, Accessories, Slides).
 
-## Get started
+## Run it
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### Option A: new project
 ```bash
-npm run reset-project
+npx create-expo-app@latest zipp --template default
+cd zipp
+# delete the template's src/ folder, then copy this project's src/ and app.json over it
+npx expo install expo-linear-gradient expo-haptics expo-blur zustand \
+  @react-native-async-storage/async-storage @expo-google-fonts/archivo \
+  @expo-google-fonts/dm-serif-display @expo/vector-icons \
+  react-native-reanimated react-native-gesture-handler react-native-safe-area-context \
+  expo-image expo-font expo-splash-screen expo-router
+npx expo start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+### Option B: your existing SDK 57 project
+Copy `src/` in, make sure tsconfig has `"paths": { "@/*": ["./src/*"] }` and
+`"main": "expo-router/entry"`, run the same `npx expo install ...` line, then `npx expo start -c`.
 
-### Other setup steps
+## Flow (mapped from the video, rebranded)
+Splash (animated ✱ + wordmark) → Welcome (Ken Burns hero, Sign up / Sign in) → Create account
+(validation, success sheet) → Greeting → Personalise (3 steps, skippable) → Tabs
+(Home, Shop, Saved, Bag, Profile) → Collection → Product → Bag → Checkout (3 steps) → Order success → Orders / tracking.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Extra ecommerce pieces added beyond the video
+Sign in, forgot password, search with recents, sort + gender filters, wishlist, product variants
+(swatches drive the image carousel), size guide, promo codes (`ZIPP10`, `REPUBLIC15`), free-delivery
+progress bar, address book, delivery + payment steps (simulated), order history with a live-advancing
+tracker, reorder, size preferences, persisted state (AsyncStorage).
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Dummy data
+Everything lives in `src/lib/data.ts`. Product photos use the storefront CDN URLs; jewelry and hats have
+no photos and render a designed placeholder tile. Replace `image` fields to swap in your own.
