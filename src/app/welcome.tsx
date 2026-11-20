@@ -37,7 +37,7 @@ const SLIDES: Slide[] = [
     id: "drop",
     step: "01 / 04",
     tag: "DROP 02 · ZIPP 2.0 LIVE",
-    title: "STREET LUXURY\nREDEFINED.",
+    title: "STREET LUXURY\nREDEFINEeeee.",
     sub: "Heavyweight jerseys, embroidered varsity jackets and limited capsule drops crafted in small batches.",
     image: HERO_IMAGE,
     perks: ["100% heavyweight fabrics", "Small-batch exclusive releases"],

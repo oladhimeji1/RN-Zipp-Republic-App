@@ -102,7 +102,7 @@ export default function Personalise() {
       topSize: p.top ?? top,
       slideSize: p.slide ?? slide,
     });
-    setOnboarded(true);
+    setOnboarded(false);
     router.replace(user ? "/(tabs)" : "/signup");
   };
 

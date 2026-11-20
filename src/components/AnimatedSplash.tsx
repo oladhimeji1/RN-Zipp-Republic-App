@@ -21,7 +21,7 @@ export function AnimatedSplash({ ready, onDone }: { ready: boolean; onDone: () =
   const exited = useRef(false);
 
   const tryExit = () => {
-    if (exited.current || !minElapsed.current) return;
+    if (exited.current || !minElapsed.current || !ready) return;
     exited.current = true;
     out.value = withTiming(0, { duration: 280, easing: Easing.out(Easing.quad) }, (fin) => {
       if (fin) runOnJS(onDone)();
